@@ -55,8 +55,7 @@ class Masheet(test_main.Framework):
 		
 		self.kite.step()
 
-		self.viewZoom = 20
-		self.updateCenter()
+		self.setZoom(20)
 		
 	def Keyboard(self, key):
 		"""
@@ -79,12 +78,11 @@ class Masheet(test_main.Framework):
 		at the _end_ of your function.
 		"""
 
-		self.gui_table.updateSettings(settings)
-
 		# do stuff        
 		self.kite.step()
 		
-		if settings.draw:
+		#if settings.draw:
+		if True:
 			self.DrawString(0,self.textLine,"Use a and s to rotate the main wing by 1 degree")
 			self.textLine+=15
 			absolute_v = mph(self.kite.glider.body.GetLinearVelocity().Length())
@@ -101,7 +99,8 @@ class Masheet(test_main.Framework):
 		
 		super(Masheet, self).Step(settings)
 
-		if settings.draw:
+		#if settings.draw:
+		if True:
 			for force in self.kite.get_force_vectors():
 				world_force, world_point, color = force
 				self.debugDraw.DrawSegment(world_point, world_point + (world_force / 100.0), color)

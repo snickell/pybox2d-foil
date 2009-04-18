@@ -8,7 +8,7 @@ Copyright (c) 2008 Seth Nickell. All rights reserved.
 """
 
 import math
-from Box2D2 import *
+from Box2D import *
 
 _pi_div_180 = math.pi / 180.0
 _180_div_pi = 180.0 / math.pi

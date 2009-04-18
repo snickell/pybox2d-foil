@@ -3,7 +3,7 @@
 # C++ version Copyright (c) 2006-2007 Erin Catto http://www.gphysics.com
 # Python version Copyright (c) 2008 kne / sirkne at gmail dot com
 # 
-# Implemented using the pybox2d SWIG interface for Box2D (pybox2d.googlepages.com)
+# Implemented using the pybox2d SWIG interface for Box2D (pybox2d.googlecode.com)
 # 
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
@@ -19,15 +19,14 @@
 # misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
-from pygame.locals import *
-import test_main
-from test_main import box2d
+from test_main import *
 
-class Empty(test_main.Framework):
+class Empty(Framework):
     """You can use this class as an outline for your tests.
 
     """
     name = "Empty" # Name of the class to display
+    _pickle_vars=[] # variables to pickle (save/load). e.g., ['name', 'var1', 'var2']
     def __init__(self):
         """ 
         Initialize all of your objects here.
@@ -42,6 +41,9 @@ class Empty(test_main.Framework):
         """
         The key is from pygame.locals.K_*
         (e.g., if key == K_z: ... )
+
+        If you are using the pyglet backend, you should be able to use the same
+        K_[a-z], see pyglet_keymapper.py
         """
         pass
 
@@ -49,14 +51,24 @@ class Empty(test_main.Framework):
         """Called upon every step.
         You should always call
          -> super(Your_Test_Class, self).Step(settings)
-        at the _end_ of your function.
+        at the beginning or end of your function.
+
+        If placed at the beginning, it will cause the actual physics step to happen first.
+        If placed at the end, it will cause the physics step to happen after your code.
         """
 
-        # do stuff
-        self.DrawString(0,self.textLine,"*** Base your own testbeds on me! ***")
-        self.textLine+=15
-
         super(Empty, self).Step(settings)
+
+        # do stuff
+
+        # Placed after the physics step, it will draw on top of physics objects
+        self.DrawStringCR("*** Base your own testbeds on me! ***")
+
+    def ShapeDestroyed(self, shape):
+        """
+        Callback indicating 'shape' has been destroyed.
+        """
+        pass
 
     def JointDestroyed(self, joint):
         """
@@ -64,13 +76,13 @@ class Empty(test_main.Framework):
         """
         pass
 
-
-    def BoundaryViolated(self, body):
-        """
-        The body went out of the world's extents.
-        """
-        pass
+    #def BoundaryViolated(self, body):
+    #    """
+    #    The body went out of the world's extents.
+    #    """
+    #    See pygame_main's implementation of BoundaryViolated for more information
+    #    about pickling and general stability.
 
 if __name__=="__main__":
-    test_main.main(Empty)
+    main(Empty)
 

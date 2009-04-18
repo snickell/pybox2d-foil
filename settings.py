@@ -3,7 +3,7 @@
 # C++ version Copyright (c) 2006-2007 Erin Catto http://www.gphysics.com
 # Python version Copyright (c) 2008 kne / sirkne at gmail dot com
 # 
-# Implemented using the pybox2d SWIG interface for Box2D (pybox2d.googlepages.com)
+# Implemented using the pybox2d SWIG interface for Box2D (pybox2d.googlecode.com)
 # 
 # This software is provided 'as-is', without any express or implied
 # warranty.  In no event will the authors be held liable for any damages
@@ -20,10 +20,13 @@
 # 3. This notice may not be removed or altered from any source distribution.
 
 class fwSettings(object):
+    backend="pyglet"
     hz=500.0
-    iterationCount=10
+    velocityIterations=10
+    positionIterations=8
     drawStats=False
     drawShapes=True
+    drawControllers=True
     drawJoints=True
     drawCoreShapes=False
     drawAABBs=False
@@ -33,14 +36,45 @@ class fwSettings(object):
     drawContactNormals=False
     drawContactForces=False
     drawFrictionForces=False
-    drawCOMs=True
+    drawCOMs=False
     enableWarmStarting=True
-    enablePositionCorrection=True
     enableTOI=True
     pause=False
     singleStep=False
     drawFPS=True # python version
     pointSize=2.5 # python version (pixel radius for drawing points)
     drawMenu=True #toggle by pressing F1
-    draw=True
-    numUndrawnFrames=(hz / 30.0)
+    onlyInit=False # run the test's initialization without graphics, and then quit (for testing)
+
+from optparse import OptionParser
+
+parser = OptionParser()
+list_options = [i for i in dir(fwSettings) if not i.startswith('_')]
+
+for opt_name in list_options:
+    value = getattr(fwSettings, opt_name)
+    if isinstance(value, bool):
+        if value:
+            parser.add_option('','--NO'+opt_name, dest=opt_name, default=value,
+                              action='store_'+str(not value).lower(),
+                              help="don't "+opt_name)
+        else:
+            parser.add_option('','--'+opt_name, dest=opt_name, default=value,
+                              action='store_'+str(not value).lower(),
+                              help=opt_name)
+            
+    else:
+        if isinstance(value, int):
+            opttype = 'int'
+        elif isinstance(value, float):
+            opttype = 'float'
+        else:
+            opttype = 'string'
+        parser.add_option('','--'+opt_name, dest=opt_name, default=value,
+                          type=opttype,
+                          help='sets the %s option'%(opt_name,))
+
+
+(fwSettings, args) = parser.parse_args()
+
+
