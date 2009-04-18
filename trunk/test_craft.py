@@ -49,8 +49,7 @@ class Masheet(test_main.Framework):
 		self.craft = Craft(m_per_s(30), 10, self.world)
 		self.craft.step()
 
-		self.viewZoom = 20
-		self.updateCenter()
+		self.setZoom(20)
 		
 		pygame.joystick.init()
 		if pygame.joystick.get_count() > 0: 
@@ -80,8 +79,6 @@ class Masheet(test_main.Framework):
 		at the _end_ of your function.
 		"""
 
-		self.gui_table.updateSettings(settings)
-
 		airfoil_angle = self.joystick.get_axis(0) * 10.0
 		self.craft.airfoil.set_wing_angle(radians(airfoil_angle))
 		hydrofoil_angle = self.joystick.get_axis(2) * 10.0
@@ -90,7 +87,8 @@ class Masheet(test_main.Framework):
 		# do stuff        
 		self.craft.step()
 		
-		if settings.draw:
+		#if settings.draw:
+		if True:
 			self.DrawString(0,self.textLine,"Use a and s to rotate the hydrofoil, q and w to rotate the airfoil")
 			self.textLine+=15
 			v = self.craft.velocity()
@@ -109,10 +107,10 @@ class Masheet(test_main.Framework):
 		
 		super(Masheet, self).Step(settings)
 
-		if settings.draw:
+		#if settings.draw:
+		if True:
 			center = self.craft.get_center()
-			self.viewCenter = center * self.viewZoom
-			self.updateCenter()
+			self.setCenter(center * self._viewZoom)
 
 			# draw velocity vector
 			print v
