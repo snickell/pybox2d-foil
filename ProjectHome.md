@@ -1,0 +1,1 @@
+Simulates the basic lift/drag equations on a NACA0015 airfoil, and inputs the forces into Box2D. The simulation is aimed at accuracy, but it runs quickly, and would be suitable for integrating with a game where you wanted a glider, airplane, etc. It can handle forces from multiple airfoils, and includes a glider construct and a kite already.
